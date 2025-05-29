@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Cadastro</title>
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="cadastro.css" />
 </head>
 <body>
   <div class="container">
@@ -24,12 +24,13 @@
         <input type="date" id="nascimento" required />
 
         <label>Gênero</label>
-        <div class="radio-group">
-          <label><input type="radio" name="genero" value="Masculino" required /> Masculino</label>
-          <label><input type="radio" name="genero" value="Feminino" /> Feminino</label>
-          <label><input type="radio" name="genero" value="Não Binário" /> Não Binário</label>
-          <label><input type="radio" name="genero" value="Prefiro não informar" /> Prefiro não informar</label>
+        <div class="gender-group" id="genderGroup">
+          <button type="button" data-value="Masculino">Masculino</button>
+          <button type="button" data-value="Feminino">Feminino</button>
+          <button type="button" data-value="Não Binário">Não Binário</button>
+          <button type="button" data-value="Prefiro não informar">Prefiro não informar</button>
         </div>
+<input type="hidden" name="genero" id="genero" required />
       </fieldset>
 
       <!-- Endereço -->
