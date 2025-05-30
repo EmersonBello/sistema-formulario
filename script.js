@@ -2,11 +2,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const loginForm = document.getElementById("loginForm");
   const cadastroForm = document.getElementById("cadastroForm");
 
-  // Máscaras simples para CPF, Telefone e CEP
   const cpfInput = document.getElementById("cpf");
   const telefoneInput = document.getElementById("telefone");
   const cepInput = document.getElementById("cep");
 
+  // Máscaras
   if (cpfInput) {
     cpfInput.addEventListener("input", () => {
       cpfInput.value = cpfInput.value
@@ -34,7 +34,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     cepInput.addEventListener("blur", () => {
-      // Simulação de preenchimento automático (mock)
       const cep = cepInput.value;
       if (cep === "01001-000") {
         document.getElementById("cidade").value = "São Paulo";
@@ -43,7 +42,19 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Validação do formulário de Login
+  // Gênero
+  const genderButtons = document.querySelectorAll("#genderGroup button");
+  const generoInput = document.getElementById("genero");
+
+  genderButtons.forEach(button => {
+    button.addEventListener("click", () => {
+      genderButtons.forEach(btn => btn.classList.remove("selected"));
+      button.classList.add("selected");
+      generoInput.value = button.dataset.value;
+    });
+  });
+
+  // Formulário de Login
   if (loginForm) {
     loginForm.addEventListener("submit", (e) => {
       e.preventDefault();
@@ -55,23 +66,21 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      // Simulação do envio dos dados
       console.log("Login enviado:", { user, pass });
       alert("Login enviado! (Simulação)");
       loginForm.reset();
     });
   }
 
-  // Validação do formulário de Cadastro
+  // Formulário de Cadastro
   if (cadastroForm) {
     cadastroForm.addEventListener("submit", (e) => {
       e.preventDefault();
 
-      // Coleta dados do formulário
       const nome = document.getElementById("nome").value.trim();
       const cpf = document.getElementById("cpf").value.trim();
       const nascimento = document.getElementById("nascimento").value;
-      const genero = cadastroForm.querySelector('input[name="genero"]:checked');
+      const genero = generoInput.value;
       const logradouro = document.getElementById("logradouro").value.trim();
       const bairro = document.getElementById("bairro").value.trim();
       const numero = document.getElementById("numero").value.trim();
@@ -84,55 +93,47 @@ document.addEventListener("DOMContentLoaded", () => {
       const senha = document.getElementById("senha").value;
       const confirmarSenha = document.getElementById("confirmarSenha").value;
 
-      // Verifica campos obrigatórios
       if (!nome || !cpf || !nascimento || !genero || !logradouro || !bairro || !numero ||
-          !cidade || !estado || !cep || !email || !telefone || !usuario || !senha || !confirmarSenha) {
+        !cidade || !estado || !cep || !email || !telefone || !usuario || !senha || !confirmarSenha) {
         alert("Por favor, preencha todos os campos.");
         return;
       }
 
-      // Valida CPF (básica)
       if (!validaCPF(cpf)) {
         alert("CPF inválido.");
         return;
       }
 
-      // Valida email
       if (!validaEmail(email)) {
         alert("E-mail inválido.");
         return;
       }
 
-      // Valida telefone (11 dígitos)
       if (telefone.replace(/\D/g, "").length !== 11) {
         alert("Telefone inválido.");
         return;
       }
 
-      // Valida nome de usuário mínimo 5 caracteres
       if (usuario.length < 5) {
         alert("Nome de usuário deve ter no mínimo 5 caracteres.");
         return;
       }
 
-      // Valida senha: mínimo 8 caracteres, maiúscula, minúscula e número
       if (!validaSenha(senha)) {
         alert("Senha deve ter no mínimo 8 caracteres, incluir letras maiúsculas, minúsculas e números.");
         return;
       }
 
-      // Confirma senha igual à senha
       if (senha !== confirmarSenha) {
         alert("As senhas não coincidem.");
         return;
       }
 
-      // Simula envio dos dados
       const dados = {
         nome,
         cpf,
         nascimento,
-        genero: genero.value,
+        genero,
         logradouro,
         bairro,
         numero,
@@ -150,32 +151,23 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Funções auxiliares
-
   function validaCPF(cpf) {
     cpf = cpf.replace(/[^\d]+/g, '');
-    if (cpf.length !== 11) return false;
-    if (/^(\d)\1{10}$/.test(cpf)) return false;
+    if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) return false;
 
     let soma = 0;
-    let resto;
-
     for (let i = 1; i <= 9; i++)
       soma += parseInt(cpf.substring(i - 1, i)) * (11 - i);
-
-    resto = (soma * 10) % 11;
+    let resto = (soma * 10) % 11;
     if (resto === 10 || resto === 11) resto = 0;
     if (resto !== parseInt(cpf.substring(9, 10))) return false;
 
     soma = 0;
     for (let i = 1; i <= 10; i++)
       soma += parseInt(cpf.substring(i - 1, i)) * (12 - i);
-
     resto = (soma * 10) % 11;
     if (resto === 10 || resto === 11) resto = 0;
-    if (resto !== parseInt(cpf.substring(10, 11))) return false;
-
-    return true;
+    return resto === parseInt(cpf.substring(10, 11));
   }
 
   function validaEmail(email) {
