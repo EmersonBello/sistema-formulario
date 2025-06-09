@@ -2,20 +2,20 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Login</title>
   <link rel="stylesheet" href="login.css" />
 </head>
 <body>
   <div class="container">
-    <form id="loginForm" class="form">
+    <form id="loginForm" action="login.php" method="POST">
       <h2>Login</h2>
 
       <label for="loginUser">Usuário</label>
-      <input type="text" id="loginUser" required />
+      <input type="text" id="loginUser" name="usuario" required />
 
       <label for="loginPass">Senha</label>
-      <input type="password" id="loginPass" required />
+      <input type="password" id="loginPass" name="senha" required />
 
       <button type="submit">Entrar</button>
 
@@ -25,7 +25,5 @@
       </div>
     </form>
   </div>
-
-  <script src="script.js"></script>
 </body>
 </html>
